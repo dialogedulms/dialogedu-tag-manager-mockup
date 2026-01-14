@@ -4,31 +4,31 @@ import { useState, useMemo } from 'react';
 
 // Real data from Account 57
 const tagData = [
-  { id: 4393, name: "Exercise", taggings_count: 4774, context_count: 2, contexts: "resource_tags,tags", created_by: "Sarah Mitchell", created_at: "2024-03-15", updated_at: "2025-01-02" },
-  { id: 5219, name: "Virtual", taggings_count: 4114, context_count: 2, contexts: "resource_tags,tags", created_by: "Sarah Mitchell", created_at: "2024-03-20", updated_at: "2025-01-05" },
-  { id: 4361, name: "Meeting", taggings_count: 3399, context_count: 1, contexts: "tags", created_by: "John Adams", created_at: "2024-02-10", updated_at: "2024-12-18" },
-  { id: 4330, name: "Juliana Berfield", taggings_count: 2292, context_count: 2, contexts: "resource_tags,tags", created_by: "Sarah Mitchell", created_at: "2024-01-22", updated_at: "2024-11-30" },
-  { id: 3962, name: "Webinar", taggings_count: 1707, context_count: 2, contexts: "resource_tags,tags", created_by: "Admin User", created_at: "2023-11-05", updated_at: "2025-01-03" },
-  { id: 4391, name: "Meditation", taggings_count: 1363, context_count: 2, contexts: "resource_tags,tags", created_by: "Sarah Mitchell", created_at: "2024-03-12", updated_at: "2024-12-20" },
-  { id: 5302, name: "In-Person", taggings_count: 1110, context_count: 1, contexts: "tags", created_by: "John Adams", created_at: "2024-06-01", updated_at: "2024-12-15" },
-  { id: 4398, name: "Ramel Rones", taggings_count: 1018, context_count: 2, contexts: "resource_tags,tags", created_by: "Sarah Mitchell", created_at: "2024-03-18", updated_at: "2024-10-22" },
-  { id: 4394, name: "Strength Training", taggings_count: 951, context_count: 2, contexts: "resource_tags,tags", created_by: "Sarah Mitchell", created_at: "2024-03-15", updated_at: "2024-11-08" },
-  { id: 4396, name: "Nancy Campbell", taggings_count: 950, context_count: 2, contexts: "resource_tags,tags", created_by: "Admin User", created_at: "2024-03-16", updated_at: "2024-09-30" },
-  { id: 4399, name: "Tai Chi", taggings_count: 597, context_count: 2, contexts: "resource_tags,tags", created_by: "Sarah Mitchell", created_at: "2024-03-18", updated_at: "2024-12-01" },
-  { id: 5237, name: "Chair Yoga Flow", taggings_count: 554, context_count: 2, contexts: "resource_tags,tags", created_by: "John Adams", created_at: "2024-04-22", updated_at: "2024-11-15" },
-  { id: 3897, name: "Video", taggings_count: 551, context_count: 1, contexts: "resource_tags", created_by: "Admin User", created_at: "2023-10-01", updated_at: "2024-12-28" },
-  { id: 4400, name: "Qigong", taggings_count: 484, context_count: 2, contexts: "resource_tags,tags", created_by: "Sarah Mitchell", created_at: "2024-03-18", updated_at: "2024-11-20" },
-  { id: 4386, name: "Expressive Arts", taggings_count: 469, context_count: 2, contexts: "resource_tags,tags", created_by: "Sarah Mitchell", created_at: "2024-03-10", updated_at: "2024-10-15" },
-  { id: 5547, name: "Megan Carleton", taggings_count: 387, context_count: 2, contexts: "resource_tags,tags", created_by: "John Adams", created_at: "2024-08-05", updated_at: "2024-12-10" },
-  { id: 5221, name: "Mindfulness Meditation", taggings_count: 376, context_count: 1, contexts: "tags", created_by: "Sarah Mitchell", created_at: "2024-04-01", updated_at: "2024-11-25" },
-  { id: 5304, name: "Dance & Movement", taggings_count: 346, context_count: 1, contexts: "tags", created_by: "John Adams", created_at: "2024-06-02", updated_at: "2024-12-05" },
-  { id: 5236, name: "Yoga Flow", taggings_count: 343, context_count: 2, contexts: "resource_tags,tags", created_by: "Sarah Mitchell", created_at: "2024-04-20", updated_at: "2024-11-18" },
-  { id: 5303, name: "Aerobic/Cardio Workout", taggings_count: 309, context_count: 1, contexts: "tags", created_by: "John Adams", created_at: "2024-06-01", updated_at: "2024-10-30" },
-  { id: 5988, name: "Low Impact", taggings_count: 308, context_count: 1, contexts: "resource_tags", created_by: "Admin User", created_at: "2024-10-15", updated_at: "2024-12-20" },
-  { id: 5933, name: "Beginner", taggings_count: 305, context_count: 1, contexts: "resource_tags", created_by: "Sarah Mitchell", created_at: "2024-09-20", updated_at: "2024-12-15" },
-  { id: 4289, name: "Nutrition", taggings_count: 285, context_count: 2, contexts: "resource_tags,tags", created_by: "Admin User", created_at: "2024-01-15", updated_at: "2024-11-10" },
-  { id: 5234, name: "Chair Stretch & Strength", taggings_count: 270, context_count: 2, contexts: "resource_tags,tags", created_by: "John Adams", created_at: "2024-04-18", updated_at: "2024-10-25" },
-  { id: 5305, name: "Patricia Arcari", taggings_count: 265, context_count: 1, contexts: "tags", created_by: "Sarah Mitchell", created_at: "2024-06-03", updated_at: "2024-09-15" },
+  { id: 4393, name: "Exercise", taggings_count: 4774, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 2500, tags: 2274 } },
+  { id: 5219, name: "Virtual", taggings_count: 4114, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 2100, tags: 2014 } },
+  { id: 4361, name: "Meeting", taggings_count: 3399, context_count: 1, contexts: "tags", context_counts: { tags: 3399 } },
+  { id: 4330, name: "Juliana Berfield", taggings_count: 2292, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 1200, tags: 1092 } },
+  { id: 3962, name: "Webinar", taggings_count: 1707, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 900, tags: 807 } },
+  { id: 4391, name: "Meditation", taggings_count: 1363, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 700, tags: 663 } },
+  { id: 5302, name: "In-Person", taggings_count: 1110, context_count: 1, contexts: "tags", context_counts: { tags: 1110 } },
+  { id: 4398, name: "Ramel Rones", taggings_count: 1018, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 500, tags: 518 } },
+  { id: 4394, name: "Strength Training", taggings_count: 951, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 480, tags: 471 } },
+  { id: 4396, name: "Nancy Campbell", taggings_count: 950, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 475, tags: 475 } },
+  { id: 4399, name: "Tai Chi", taggings_count: 597, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 300, tags: 297 } },
+  { id: 5237, name: "Chair Yoga Flow", taggings_count: 554, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 280, tags: 274 } },
+  { id: 3897, name: "Video", taggings_count: 551, context_count: 1, contexts: "resource_tags", context_counts: { resource_tags: 551 } },
+  { id: 4400, name: "Qigong", taggings_count: 484, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 250, tags: 234 } },
+  { id: 4386, name: "Expressive Arts", taggings_count: 469, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 240, tags: 229 } },
+  { id: 5547, name: "Megan Carleton", taggings_count: 387, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 200, tags: 187 } },
+  { id: 5221, name: "Mindfulness Meditation", taggings_count: 376, context_count: 1, contexts: "tags", context_counts: { tags: 376 } },
+  { id: 5304, name: "Dance & Movement", taggings_count: 346, context_count: 1, contexts: "tags", context_counts: { tags: 346 } },
+  { id: 5236, name: "Yoga Flow", taggings_count: 343, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 175, tags: 168 } },
+  { id: 5303, name: "Aerobic/Cardio Workout", taggings_count: 309, context_count: 1, contexts: "tags", context_counts: { tags: 309 } },
+  { id: 5988, name: "Low Impact", taggings_count: 308, context_count: 1, contexts: "resource_tags", context_counts: { resource_tags: 308 } },
+  { id: 5933, name: "Beginner", taggings_count: 305, context_count: 1, contexts: "resource_tags", context_counts: { resource_tags: 305 } },
+  { id: 4289, name: "Nutrition", taggings_count: 285, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 145, tags: 140 } },
+  { id: 5234, name: "Chair Stretch & Strength", taggings_count: 270, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 140, tags: 130 } },
+  { id: 5305, name: "Patricia Arcari", taggings_count: 265, context_count: 1, contexts: "tags", context_counts: { tags: 265 } },
 ];
 
 const orphanedCount = 12;
@@ -46,6 +46,7 @@ export default function TagManager() {
   const [modalType, setModalType] = useState(null);
   const [renameValue, setRenameValue] = useState('');
   const [mergeTarget, setMergeTarget] = useState('');
+  const [mergeContext, setMergeContext] = useState('');
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [activeDropdown, setActiveDropdown] = useState(null);
 
@@ -112,6 +113,7 @@ export default function TagManager() {
       setRenameValue(tag.name);
     } else if (type === 'merge') {
       setMergeTarget('');
+      setMergeContext('');
     } else if (type === 'delete') {
       setDeleteConfirmText('');
     }
@@ -122,6 +124,7 @@ export default function TagManager() {
     setSelectedTag(null);
     setRenameValue('');
     setMergeTarget('');
+    setMergeContext('');
     setDeleteConfirmText('');
   };
 
@@ -135,15 +138,44 @@ export default function TagManager() {
   };
 
   const handleMerge = () => {
-    if (mergeTarget) {
+    if (mergeTarget && mergeContext) {
       const targetTag = tags.find(t => t.id === parseInt(mergeTarget));
       if (targetTag) {
+        const mergeCount = selectedTag.context_counts[mergeContext] || 0;
         setTags(prev => prev
-          .map(tag => tag.id === targetTag.id 
-            ? { ...tag, taggings_count: tag.taggings_count + selectedTag.taggings_count, updated_at: new Date().toISOString().split('T')[0] }
-            : tag
-          )
-          .filter(tag => tag.id !== selectedTag.id)
+          .map(tag => {
+            if (tag.id === targetTag.id) {
+              // Add to target tag
+              const newContextCounts = { ...tag.context_counts };
+              newContextCounts[mergeContext] = (newContextCounts[mergeContext] || 0) + mergeCount;
+              const newContexts = Object.keys(newContextCounts).filter(k => newContextCounts[k] > 0).join(',');
+              return { 
+                ...tag, 
+                taggings_count: tag.taggings_count + mergeCount,
+                context_counts: newContextCounts,
+                contexts: newContexts,
+                context_count: newContexts.split(',').length
+              };
+            } else if (tag.id === selectedTag.id) {
+              // Remove from source tag
+              const newContextCounts = { ...tag.context_counts };
+              delete newContextCounts[mergeContext];
+              const remainingCount = Object.values(newContextCounts).reduce((a, b) => a + b, 0);
+              if (remainingCount === 0) {
+                return null; // Will be filtered out
+              }
+              const newContexts = Object.keys(newContextCounts).filter(k => newContextCounts[k] > 0).join(',');
+              return {
+                ...tag,
+                taggings_count: remainingCount,
+                context_counts: newContextCounts,
+                contexts: newContexts,
+                context_count: newContexts.split(',').length
+              };
+            }
+            return tag;
+          })
+          .filter(Boolean)
         );
         closeModal();
       }
@@ -341,24 +373,6 @@ export default function TagManager() {
                   >
                     CONTEXTS <SortIcon field="context_count" />
                   </th>
-                  <th 
-                    className="text-left px-4 py-3 text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('created_by')}
-                  >
-                    CREATED BY <SortIcon field="created_by" />
-                  </th>
-                  <th 
-                    className="text-left px-4 py-3 text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('created_at')}
-                  >
-                    CREATED <SortIcon field="created_at" />
-                  </th>
-                  <th 
-                    className="text-left px-4 py-3 text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('updated_at')}
-                  >
-                    UPDATED <SortIcon field="updated_at" />
-                  </th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600">
                     ACTIONS
                   </th>
@@ -394,9 +408,6 @@ export default function TagManager() {
                         </div>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-gray-600">{tag.created_by}</td>
-                    <td className="px-4 py-3 text-gray-500 text-xs">{tag.created_at}</td>
-                    <td className="px-4 py-3 text-gray-500 text-xs">{tag.updated_at}</td>
                     <td className="px-4 py-3 relative">
                       <button 
                         onClick={() => setActiveDropdown(activeDropdown === tag.id ? null : tag.id)}
@@ -503,35 +514,52 @@ export default function TagManager() {
             <div className="p-4">
               <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4">
                 <p className="text-sm text-blue-800">
-                  <strong>Source tag:</strong> &quot;{selectedTag.name}&quot; ({selectedTag.taggings_count.toLocaleString()} uses)
+                  <strong>Source tag:</strong> &quot;{selectedTag.name}&quot; ({selectedTag.taggings_count.toLocaleString()} total uses)
                 </p>
               </div>
-              <p className="text-sm text-gray-600 mb-4">
-                All {selectedTag.taggings_count.toLocaleString()} taggings will be moved to the target tag. 
-                &quot;{selectedTag.name}&quot; will then be deleted.
-              </p>
-              <label className="block text-xs text-gray-600 mb-1">Merge into (target tag)</label>
+              
+              <label className="block text-xs text-gray-600 mb-1">Select context to merge</label>
               <select 
-                className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white"
-                value={mergeTarget}
-                onChange={(e) => setMergeTarget(e.target.value)}
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white mb-4"
+                value={mergeContext}
+                onChange={(e) => setMergeContext(e.target.value)}
               >
-                <option value="">Select a tag...</option>
-                {tags
-                  .filter(t => t.id !== selectedTag.id)
-                  .sort((a, b) => a.name.localeCompare(b.name))
-                  .map(tag => (
-                    <option key={tag.id} value={tag.id}>
-                      {tag.name} ({tag.taggings_count.toLocaleString()} uses)
-                    </option>
-                  ))
-                }
+                <option value="">Select a context...</option>
+                {selectedTag.contexts.split(',').map(ctx => (
+                  <option key={ctx} value={ctx}>
+                    {ctx} ({(selectedTag.context_counts[ctx] || 0).toLocaleString()} uses)
+                  </option>
+                ))}
               </select>
-              {mergeTarget && (
+
+              {mergeContext && (
+                <>
+                  <label className="block text-xs text-gray-600 mb-1">Merge into (target tag)</label>
+                  <select 
+                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white"
+                    value={mergeTarget}
+                    onChange={(e) => setMergeTarget(e.target.value)}
+                  >
+                    <option value="">Select a tag...</option>
+                    {tags
+                      .filter(t => t.id !== selectedTag.id)
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map(tag => (
+                        <option key={tag.id} value={tag.id}>
+                          {tag.name} ({tag.taggings_count.toLocaleString()} uses)
+                        </option>
+                      ))
+                    }
+                  </select>
+                </>
+              )}
+
+              {mergeContext && mergeTarget && (
                 <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded p-3">
                   <p className="text-sm text-yellow-800">
-                    <strong>Preview:</strong> {selectedTag.taggings_count.toLocaleString()} taggings will be moved. 
-                    Duplicates will be handled automatically.
+                    <strong>Preview:</strong> {(selectedTag.context_counts[mergeContext] || 0).toLocaleString()} taggings from &quot;{mergeContext}&quot; context will be moved to &quot;{tags.find(t => t.id === parseInt(mergeTarget))?.name}&quot;. 
+                    {selectedTag.context_count > 1 && ` Other contexts will remain on "${selectedTag.name}".`}
+                    {selectedTag.context_count === 1 && ` "${selectedTag.name}" will be deleted.`}
                   </p>
                 </div>
               )}
@@ -545,10 +573,10 @@ export default function TagManager() {
               </button>
               <button 
                 onClick={handleMerge}
-                disabled={!mergeTarget}
+                disabled={!mergeTarget || !mergeContext}
                 className="bg-orange-500 text-white px-4 py-2 rounded text-sm hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Merge Tags
+                Merge Context
               </button>
             </div>
           </div>
