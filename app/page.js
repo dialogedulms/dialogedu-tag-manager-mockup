@@ -2,33 +2,61 @@
 
 import { useState, useMemo } from 'react';
 
-// Real data from Account 57
+// Context labels mapping
+const contextLabels = {
+  'lo_tags': 'Learning Object Tags',
+  'tags': 'Event Tags',
+  'resource_tags': 'Resource Tags',
+  'question_tags': 'Question Tags',
+  'qb_tags': 'Question Bank Tags',
+  'course_tags': 'Course Tags'
+};
+
+// Real data from Account 57 - each tag + context is a separate row
 const tagData = [
-  { id: 4393, name: "Exercise", taggings_count: 4774, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 2500, tags: 2274 } },
-  { id: 5219, name: "Virtual", taggings_count: 4114, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 2100, tags: 2014 } },
-  { id: 4361, name: "Meeting", taggings_count: 3399, context_count: 1, contexts: "tags", context_counts: { tags: 3399 } },
-  { id: 4330, name: "Juliana Berfield", taggings_count: 2292, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 1200, tags: 1092 } },
-  { id: 3962, name: "Webinar", taggings_count: 1707, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 900, tags: 807 } },
-  { id: 4391, name: "Meditation", taggings_count: 1363, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 700, tags: 663 } },
-  { id: 5302, name: "In-Person", taggings_count: 1110, context_count: 1, contexts: "tags", context_counts: { tags: 1110 } },
-  { id: 4398, name: "Ramel Rones", taggings_count: 1018, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 500, tags: 518 } },
-  { id: 4394, name: "Strength Training", taggings_count: 951, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 480, tags: 471 } },
-  { id: 4396, name: "Nancy Campbell", taggings_count: 950, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 475, tags: 475 } },
-  { id: 4399, name: "Tai Chi", taggings_count: 597, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 300, tags: 297 } },
-  { id: 5237, name: "Chair Yoga Flow", taggings_count: 554, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 280, tags: 274 } },
-  { id: 3897, name: "Video", taggings_count: 551, context_count: 1, contexts: "resource_tags", context_counts: { resource_tags: 551 } },
-  { id: 4400, name: "Qigong", taggings_count: 484, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 250, tags: 234 } },
-  { id: 4386, name: "Expressive Arts", taggings_count: 469, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 240, tags: 229 } },
-  { id: 5547, name: "Megan Carleton", taggings_count: 387, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 200, tags: 187 } },
-  { id: 5221, name: "Mindfulness Meditation", taggings_count: 376, context_count: 1, contexts: "tags", context_counts: { tags: 376 } },
-  { id: 5304, name: "Dance & Movement", taggings_count: 346, context_count: 1, contexts: "tags", context_counts: { tags: 346 } },
-  { id: 5236, name: "Yoga Flow", taggings_count: 343, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 175, tags: 168 } },
-  { id: 5303, name: "Aerobic/Cardio Workout", taggings_count: 309, context_count: 1, contexts: "tags", context_counts: { tags: 309 } },
-  { id: 5988, name: "Low Impact", taggings_count: 308, context_count: 1, contexts: "resource_tags", context_counts: { resource_tags: 308 } },
-  { id: 5933, name: "Beginner", taggings_count: 305, context_count: 1, contexts: "resource_tags", context_counts: { resource_tags: 305 } },
-  { id: 4289, name: "Nutrition", taggings_count: 285, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 145, tags: 140 } },
-  { id: 5234, name: "Chair Stretch & Strength", taggings_count: 270, context_count: 2, contexts: "resource_tags,tags", context_counts: { resource_tags: 140, tags: 130 } },
-  { id: 5305, name: "Patricia Arcari", taggings_count: 265, context_count: 1, contexts: "tags", context_counts: { tags: 265 } },
+  { id: 4393, name: "Exercise", taggings_count: 2500, context: "resource_tags", created_at: "2024-03-15" },
+  { id: 4393, name: "Exercise", taggings_count: 2274, context: "lo_tags", created_at: "2024-03-15" },
+  { id: 5219, name: "Virtual", taggings_count: 2100, context: "resource_tags", created_at: "2024-03-20" },
+  { id: 5219, name: "Virtual", taggings_count: 2014, context: "lo_tags", created_at: "2024-03-20" },
+  { id: 4361, name: "Meeting", taggings_count: 3399, context: "lo_tags", created_at: "2024-02-10" },
+  { id: 4330, name: "Juliana Berfield", taggings_count: 1200, context: "resource_tags", created_at: "2024-01-22" },
+  { id: 4330, name: "Juliana Berfield", taggings_count: 1092, context: "lo_tags", created_at: "2024-01-22" },
+  { id: 3962, name: "Webinar", taggings_count: 900, context: "resource_tags", created_at: "2023-11-05" },
+  { id: 3962, name: "Webinar", taggings_count: 807, context: "lo_tags", created_at: "2023-11-05" },
+  { id: 4391, name: "Meditation", taggings_count: 700, context: "resource_tags", created_at: "2024-03-12" },
+  { id: 4391, name: "Meditation", taggings_count: 663, context: "lo_tags", created_at: "2024-03-12" },
+  { id: 5302, name: "In-Person", taggings_count: 1110, context: "lo_tags", created_at: "2024-06-01" },
+  { id: 4398, name: "Ramel Rones", taggings_count: 500, context: "resource_tags", created_at: "2024-03-18" },
+  { id: 4398, name: "Ramel Rones", taggings_count: 518, context: "lo_tags", created_at: "2024-03-18" },
+  { id: 4394, name: "Strength Training", taggings_count: 480, context: "resource_tags", created_at: "2024-03-15" },
+  { id: 4394, name: "Strength Training", taggings_count: 471, context: "lo_tags", created_at: "2024-03-15" },
+  { id: 4396, name: "Nancy Campbell", taggings_count: 475, context: "resource_tags", created_at: "2024-03-16" },
+  { id: 4396, name: "Nancy Campbell", taggings_count: 475, context: "lo_tags", created_at: "2024-03-16" },
+  { id: 4399, name: "Tai Chi", taggings_count: 300, context: "resource_tags", created_at: "2024-03-18" },
+  { id: 4399, name: "Tai Chi", taggings_count: 297, context: "lo_tags", created_at: "2024-03-18" },
+  { id: 5237, name: "Chair Yoga Flow", taggings_count: 280, context: "resource_tags", created_at: "2024-04-22" },
+  { id: 5237, name: "Chair Yoga Flow", taggings_count: 274, context: "lo_tags", created_at: "2024-04-22" },
+  { id: 3897, name: "Video", taggings_count: 551, context: "resource_tags", created_at: "2023-10-01" },
+  { id: 4400, name: "Qigong", taggings_count: 250, context: "resource_tags", created_at: "2024-03-18" },
+  { id: 4400, name: "Qigong", taggings_count: 234, context: "lo_tags", created_at: "2024-03-18" },
+  { id: 4386, name: "Expressive Arts", taggings_count: 240, context: "resource_tags", created_at: "2024-03-10" },
+  { id: 4386, name: "Expressive Arts", taggings_count: 229, context: "lo_tags", created_at: "2024-03-10" },
+  { id: 5547, name: "Megan Carleton", taggings_count: 200, context: "resource_tags", created_at: "2024-08-05" },
+  { id: 5547, name: "Megan Carleton", taggings_count: 187, context: "lo_tags", created_at: "2024-08-05" },
+  { id: 5221, name: "Mindfulness Meditation", taggings_count: 376, context: "lo_tags", created_at: "2024-04-01" },
+  { id: 5304, name: "Dance & Movement", taggings_count: 346, context: "lo_tags", created_at: "2024-06-02" },
+  { id: 5236, name: "Yoga Flow", taggings_count: 175, context: "resource_tags", created_at: "2024-04-20" },
+  { id: 5236, name: "Yoga Flow", taggings_count: 168, context: "lo_tags", created_at: "2024-04-20" },
+  { id: 5303, name: "Aerobic/Cardio Workout", taggings_count: 309, context: "lo_tags", created_at: "2024-06-01" },
+  { id: 5988, name: "Low Impact", taggings_count: 308, context: "resource_tags", created_at: "2024-10-15" },
+  { id: 5933, name: "Beginner", taggings_count: 305, context: "resource_tags", created_at: "2024-09-20" },
+  { id: 4289, name: "Nutrition", taggings_count: 145, context: "resource_tags", created_at: "2024-01-15" },
+  { id: 4289, name: "Nutrition", taggings_count: 140, context: "lo_tags", created_at: "2024-01-15" },
+  { id: 5234, name: "Chair Stretch & Strength", taggings_count: 140, context: "resource_tags", created_at: "2024-04-18" },
+  { id: 5234, name: "Chair Stretch & Strength", taggings_count: 130, context: "lo_tags", created_at: "2024-04-18" },
+  { id: 5305, name: "Patricia Arcari", taggings_count: 265, context: "lo_tags", created_at: "2024-06-03" },
+  { id: 6001, name: "Oncology", taggings_count: 150, context: "question_tags", created_at: "2024-07-10" },
+  { id: 6002, name: "Assessment", taggings_count: 85, context: "qb_tags", created_at: "2024-08-20" },
 ];
 
 const orphanedCount = 12;
@@ -41,12 +69,10 @@ export default function TagManager() {
   const [usageFilter, setUsageFilter] = useState('all');
   const [sortField, setSortField] = useState('taggings_count');
   const [sortDirection, setSortDirection] = useState('desc');
-  const [expandedContexts, setExpandedContexts] = useState({});
   const [selectedTag, setSelectedTag] = useState(null);
   const [modalType, setModalType] = useState(null);
   const [renameValue, setRenameValue] = useState('');
   const [mergeTarget, setMergeTarget] = useState('');
-  const [mergeContext, setMergeContext] = useState('');
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [activeDropdown, setActiveDropdown] = useState(null);
 
@@ -61,7 +87,7 @@ export default function TagManager() {
     
     if (contextFilter !== 'all') {
       result = result.filter(tag => 
-        tag.contexts.includes(contextFilter)
+        tag.context === contextFilter
       );
     }
     
@@ -98,13 +124,6 @@ export default function TagManager() {
     }
   };
 
-  const toggleContextExpand = (tagId) => {
-    setExpandedContexts(prev => ({
-      ...prev,
-      [tagId]: !prev[tagId]
-    }));
-  };
-
   const openModal = (type, tag) => {
     setSelectedTag(tag);
     setModalType(type);
@@ -113,7 +132,6 @@ export default function TagManager() {
       setRenameValue(tag.name);
     } else if (type === 'merge') {
       setMergeTarget('');
-      setMergeContext('');
     } else if (type === 'delete') {
       setDeleteConfirmText('');
     }
@@ -124,58 +142,33 @@ export default function TagManager() {
     setSelectedTag(null);
     setRenameValue('');
     setMergeTarget('');
-    setMergeContext('');
     setDeleteConfirmText('');
   };
 
   const handleRename = () => {
     if (renameValue.trim() && renameValue !== selectedTag.name) {
       setTags(prev => prev.map(tag => 
-        tag.id === selectedTag.id ? { ...tag, name: renameValue.trim(), updated_at: new Date().toISOString().split('T')[0] } : tag
+        tag.id === selectedTag.id ? { ...tag, name: renameValue.trim() } : tag
       ));
       closeModal();
     }
   };
 
   const handleMerge = () => {
-    if (mergeTarget && mergeContext) {
-      const targetTag = tags.find(t => t.id === parseInt(mergeTarget));
+    if (mergeTarget) {
+      const targetTag = tags.find(t => t.id === parseInt(mergeTarget.split('-')[0]) && t.context === mergeTarget.split('-')[1]);
       if (targetTag) {
-        const mergeCount = selectedTag.context_counts[mergeContext] || 0;
         setTags(prev => prev
           .map(tag => {
-            if (tag.id === targetTag.id) {
-              // Add to target tag
-              const newContextCounts = { ...tag.context_counts };
-              newContextCounts[mergeContext] = (newContextCounts[mergeContext] || 0) + mergeCount;
-              const newContexts = Object.keys(newContextCounts).filter(k => newContextCounts[k] > 0).join(',');
+            if (tag.id === targetTag.id && tag.context === targetTag.context) {
               return { 
                 ...tag, 
-                taggings_count: tag.taggings_count + mergeCount,
-                context_counts: newContextCounts,
-                contexts: newContexts,
-                context_count: newContexts.split(',').length
-              };
-            } else if (tag.id === selectedTag.id) {
-              // Remove from source tag
-              const newContextCounts = { ...tag.context_counts };
-              delete newContextCounts[mergeContext];
-              const remainingCount = Object.values(newContextCounts).reduce((a, b) => a + b, 0);
-              if (remainingCount === 0) {
-                return null; // Will be filtered out
-              }
-              const newContexts = Object.keys(newContextCounts).filter(k => newContextCounts[k] > 0).join(',');
-              return {
-                ...tag,
-                taggings_count: remainingCount,
-                context_counts: newContextCounts,
-                contexts: newContexts,
-                context_count: newContexts.split(',').length
+                taggings_count: tag.taggings_count + selectedTag.taggings_count
               };
             }
             return tag;
           })
-          .filter(Boolean)
+          .filter(tag => !(tag.id === selectedTag.id && tag.context === selectedTag.context))
         );
         closeModal();
       }
@@ -186,7 +179,7 @@ export default function TagManager() {
     if (selectedTag.taggings_count > 10 && deleteConfirmText !== 'DELETE') {
       return;
     }
-    setTags(prev => prev.filter(tag => tag.id !== selectedTag.id));
+    setTags(prev => prev.filter(tag => !(tag.id === selectedTag.id && tag.context === selectedTag.context)));
     closeModal();
   };
 
@@ -369,9 +362,15 @@ export default function TagManager() {
                   </th>
                   <th 
                     className="text-left px-4 py-3 text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('context_count')}
+                    onClick={() => handleSort('context')}
                   >
-                    CONTEXTS <SortIcon field="context_count" />
+                    CONTEXT <SortIcon field="context" />
+                  </th>
+                  <th 
+                    className="text-left px-4 py-3 text-xs font-semibold text-gray-600 cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('created_at')}
+                  >
+                    CREATED <SortIcon field="created_at" />
                   </th>
                   <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600">
                     ACTIONS
@@ -380,42 +379,23 @@ export default function TagManager() {
               </thead>
               <tbody>
                 {filteredTags.map((tag, index) => (
-                  <tr key={tag.id} className={`border-b border-gray-100 hover:bg-gray-50 ${index % 2 === 1 ? 'bg-gray-50/50' : ''}`}>
+                  <tr key={`${tag.id}-${tag.context}`} className={`border-b border-gray-100 hover:bg-gray-50 ${index % 2 === 1 ? 'bg-gray-50/50' : ''}`}>
                     <td className="px-4 py-3 text-gray-700">{tag.name}</td>
                     <td className="px-4 py-3 text-gray-600">{tag.taggings_count.toLocaleString()}</td>
                     <td className="px-4 py-3">
-                      {tag.context_count === 1 ? (
-                        <span className="inline-block bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded">
-                          {tag.contexts}
-                        </span>
-                      ) : (
-                        <div>
-                          <button 
-                            onClick={() => toggleContextExpand(tag.id)}
-                            className="text-blue-600 hover:text-blue-800 text-xs"
-                          >
-                            {tag.context_count} contexts {expandedContexts[tag.id] ? '▼' : '▶'}
-                          </button>
-                          {expandedContexts[tag.id] && (
-                            <div className="mt-1 flex flex-wrap gap-1">
-                              {tag.contexts.split(',').map(ctx => (
-                                <span key={ctx} className="inline-block bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded">
-                                  {ctx}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      )}
+                      <span className="inline-block bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded">
+                        {contextLabels[tag.context] || tag.context}
+                      </span>
                     </td>
+                    <td className="px-4 py-3 text-gray-500 text-xs">{tag.created_at}</td>
                     <td className="px-4 py-3 relative">
                       <button 
-                        onClick={() => setActiveDropdown(activeDropdown === tag.id ? null : tag.id)}
+                        onClick={() => setActiveDropdown(activeDropdown === `${tag.id}-${tag.context}` ? null : `${tag.id}-${tag.context}`)}
                         className="border border-gray-300 bg-white px-2 py-1 rounded text-gray-500 hover:bg-gray-50"
                       >
                         ⚙️ ▼
                       </button>
-                      {activeDropdown === tag.id && (
+                      {activeDropdown === `${tag.id}-${tag.context}` && (
                         <div className="absolute right-4 top-10 bg-white border border-gray-200 rounded shadow-lg z-10 min-w-32">
                           <button 
                             onClick={() => openModal('rename', tag)}
@@ -514,52 +494,37 @@ export default function TagManager() {
             <div className="p-4">
               <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4">
                 <p className="text-sm text-blue-800">
-                  <strong>Source tag:</strong> &quot;{selectedTag.name}&quot; ({selectedTag.taggings_count.toLocaleString()} total uses)
+                  <strong>Source:</strong> &quot;{selectedTag.name}&quot; in {contextLabels[selectedTag.context] || selectedTag.context} ({selectedTag.taggings_count.toLocaleString()} uses)
                 </p>
               </div>
               
-              <label className="block text-xs text-gray-600 mb-1">Select context to merge</label>
+              <p className="text-sm text-gray-600 mb-4">
+                Select a target tag to merge these {selectedTag.taggings_count.toLocaleString()} taggings into. Only tags in the same context are shown.
+              </p>
+
+              <label className="block text-xs text-gray-600 mb-1">Merge into (target tag)</label>
               <select 
-                className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white mb-4"
-                value={mergeContext}
-                onChange={(e) => setMergeContext(e.target.value)}
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white"
+                value={mergeTarget}
+                onChange={(e) => setMergeTarget(e.target.value)}
               >
-                <option value="">Select a context...</option>
-                {selectedTag.contexts.split(',').map(ctx => (
-                  <option key={ctx} value={ctx}>
-                    {ctx} ({(selectedTag.context_counts[ctx] || 0).toLocaleString()} uses)
-                  </option>
-                ))}
+                <option value="">Select a tag...</option>
+                {tags
+                  .filter(t => t.context === selectedTag.context && !(t.id === selectedTag.id && t.context === selectedTag.context))
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map(tag => (
+                    <option key={`${tag.id}-${tag.context}`} value={`${tag.id}-${tag.context}`}>
+                      {tag.name} ({tag.taggings_count.toLocaleString()} uses)
+                    </option>
+                  ))
+                }
               </select>
 
-              {mergeContext && (
-                <>
-                  <label className="block text-xs text-gray-600 mb-1">Merge into (target tag)</label>
-                  <select 
-                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white"
-                    value={mergeTarget}
-                    onChange={(e) => setMergeTarget(e.target.value)}
-                  >
-                    <option value="">Select a tag...</option>
-                    {tags
-                      .filter(t => t.id !== selectedTag.id)
-                      .sort((a, b) => a.name.localeCompare(b.name))
-                      .map(tag => (
-                        <option key={tag.id} value={tag.id}>
-                          {tag.name} ({tag.taggings_count.toLocaleString()} uses)
-                        </option>
-                      ))
-                    }
-                  </select>
-                </>
-              )}
-
-              {mergeContext && mergeTarget && (
+              {mergeTarget && (
                 <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded p-3">
                   <p className="text-sm text-yellow-800">
-                    <strong>Preview:</strong> {(selectedTag.context_counts[mergeContext] || 0).toLocaleString()} taggings from &quot;{mergeContext}&quot; context will be moved to &quot;{tags.find(t => t.id === parseInt(mergeTarget))?.name}&quot;. 
-                    {selectedTag.context_count > 1 && ` Other contexts will remain on "${selectedTag.name}".`}
-                    {selectedTag.context_count === 1 && ` "${selectedTag.name}" will be deleted.`}
+                    <strong>Preview:</strong> {selectedTag.taggings_count.toLocaleString()} taggings will be moved to &quot;{tags.find(t => `${t.id}-${t.context}` === mergeTarget)?.name}&quot;. 
+                    &quot;{selectedTag.name}&quot; will be removed from {contextLabels[selectedTag.context] || selectedTag.context}.
                   </p>
                 </div>
               )}
@@ -573,10 +538,10 @@ export default function TagManager() {
               </button>
               <button 
                 onClick={handleMerge}
-                disabled={!mergeTarget || !mergeContext}
+                disabled={!mergeTarget}
                 className="bg-orange-500 text-white px-4 py-2 rounded text-sm hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Merge Context
+                Merge Tag
               </button>
             </div>
           </div>
@@ -594,14 +559,14 @@ export default function TagManager() {
             <div className="p-4">
               <div className="bg-red-50 border border-red-200 rounded p-3 mb-4">
                 <p className="text-sm text-red-800">
-                  <strong>Warning:</strong> You are about to delete &quot;{selectedTag.name}&quot;
+                  <strong>Warning:</strong> You are about to delete &quot;{selectedTag.name}&quot; from {contextLabels[selectedTag.context] || selectedTag.context}
                 </p>
               </div>
               <p className="text-sm text-gray-600 mb-2">
-                This tag will be removed from <strong>{selectedTag.taggings_count.toLocaleString()}</strong> items:
+                This tag will be removed from <strong>{selectedTag.taggings_count.toLocaleString()}</strong> items in this context:
               </p>
               <ul className="text-sm text-gray-600 mb-4 list-disc list-inside">
-                <li>Courses, learning objects, resources, etc. will remain</li>
+                <li>Content items will remain unchanged</li>
                 <li>Only the tag association will be removed</li>
                 <li>This action cannot be undone</li>
               </ul>
