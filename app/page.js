@@ -12,6 +12,16 @@ const contextLabels = {
   'course_tags': 'Course Tags'
 };
 
+// Format date as mm/dd/yyyy
+const formatDate = (dateStr) => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${month}/${day}/${year}`;
+};
+
 // Real data from Account 57 - each tag + context is a separate row
 const tagData = [
   { id: 4393, name: "Exercise", taggings_count: 2500, context: "resource_tags", created_at: "2024-03-15" },
@@ -306,12 +316,11 @@ export default function TagManager() {
                 value={contextFilter}
                 onChange={(e) => setContextFilter(e.target.value)}
               >
-                <option value="all">All</option>
-                <option value="tags">tags</option>
-                <option value="resource_tags">resource_tags</option>
-                <option value="lo_tags">lo_tags</option>
-                <option value="question_tags">question_tags</option>
-                <option value="qb_tags">qb_tags</option>
+                <option value="all">All Contexts</option>
+                <option value="lo_tags">Learning Object Tags</option>
+                <option value="resource_tags">Resource Tags</option>
+                <option value="question_tags">Question Tags</option>
+                <option value="qb_tags">Question Bank Tags</option>
               </select>
             </div>
             <div className="flex items-center gap-2">
@@ -387,7 +396,7 @@ export default function TagManager() {
                         {contextLabels[tag.context] || tag.context}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-500 text-xs">{tag.created_at}</td>
+                    <td className="px-4 py-3 text-gray-500 text-xs">{formatDate(tag.created_at)}</td>
                     <td className="px-4 py-3 relative">
                       <button 
                         onClick={() => setActiveDropdown(activeDropdown === `${tag.id}-${tag.context}` ? null : `${tag.id}-${tag.context}`)}
@@ -498,9 +507,11 @@ export default function TagManager() {
                 </p>
               </div>
               
-              <p className="text-sm text-gray-600 mb-4">
-                Select a target tag to merge these {selectedTag.taggings_count.toLocaleString()} taggings into. Only tags in the same context are shown.
-              </p>
+              <div className="bg-gray-100 border border-gray-300 rounded p-3 mb-4">
+                <p className="text-sm text-gray-700">
+                  <strong>⚠️ Same context only:</strong> You can only merge with other tags in <strong>{contextLabels[selectedTag.context] || selectedTag.context}</strong>. Tags in different contexts are not shown.
+                </p>
+              </div>
 
               <label className="block text-xs text-gray-600 mb-1">Merge into (target tag)</label>
               <select 
